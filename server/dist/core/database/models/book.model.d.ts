@@ -1,0 +1,142 @@
+import { Model } from 'sequelize-typescript';
+import { Author } from './author.model';
+import { Series } from './series.model';
+export interface EBookFileObject {
+    ino: string;
+    ebookFormat: string;
+    addedAt: number;
+    updatedAt: number;
+    metadata: {
+        filename: string;
+        ext: string;
+        path: string;
+        relPath: string;
+        size: number;
+        mtimeMs: number;
+        ctimeMs: number;
+        birthtimeMs: number;
+    };
+}
+export interface ChapterObject {
+    id: number;
+    start: number;
+    end: number;
+    title: string;
+}
+export interface AudioFileObject {
+    index: number;
+    ino: string;
+    metadata: {
+        filename: string;
+        ext: string;
+        path: string;
+        relPath: string;
+        size: number;
+        mtimeMs: number;
+        ctimeMs: number;
+        birthtimeMs: number;
+    };
+    addedAt: number;
+    updatedAt: number;
+    trackNumFromMeta?: number;
+    discNumFromMeta?: number;
+    trackNumFromFilename?: number;
+    discNumFromFilename?: number;
+    manuallyVerified: boolean;
+    exclude?: boolean;
+    error?: string;
+    format: string;
+    duration: number;
+    bitRate: number;
+    language?: string;
+    codec: string;
+    timeBase: string;
+    channels: number;
+    channelLayout: string;
+    chapters: ChapterObject[];
+    embeddedCoverArt?: string;
+    metaTags: {
+        tagAlbum?: string;
+        tagArtist?: string;
+        tagGenre?: string;
+        tagTitle?: string;
+        tagSeries?: string;
+        tagSeriesPart?: string;
+        tagTrack?: string;
+        tagDisc?: string;
+        tagSubtitle?: string;
+        tagAlbumArtist?: string;
+        tagDate?: string;
+        tagComposer?: string;
+        tagPublisher?: string;
+        tagComment?: string;
+        tagDescription?: string;
+        tagEncoder?: string;
+        tagEncodedBy?: string;
+        tagIsbn?: string;
+        tagLanguage?: string;
+        tagASIN?: string;
+        tagOverdriveMediaMarker?: string;
+        tagOriginalYear?: string;
+        tagReleaseDate?: string;
+        tagReleaseCountry?: string;
+        tagReleaseStatus?: string;
+        tagReleaseType?: string;
+        tagReleaseGroup?: string;
+        tagPodcast?: string;
+        tagPodcastType?: string;
+        tagPodcastURL?: string;
+        tagPodcastFeedURL?: string;
+        tagPodcasts?: string;
+    };
+    mimeType: string;
+}
+export interface AudioTrack extends AudioFileObject {
+    title: string;
+    contentUrl: string;
+    startOffset: number;
+}
+export declare class Book extends Model<Book> {
+    id: string;
+    title: string;
+    titleIgnorePrefix: string;
+    subtitle: string;
+    publishedYear: string;
+    publishedDate: string;
+    publisher: string;
+    description: string;
+    isbn: string;
+    asin: string;
+    language: string;
+    explicit: boolean;
+    abridged: boolean;
+    coverPath: string;
+    duration: number;
+    narrators: string[];
+    audioFiles: AudioFileObject[];
+    ebookFile: EBookFileObject;
+    chapters: ChapterObject[];
+    tags: string[];
+    genres: string[];
+    authors: Author[];
+    series: Series[];
+    static getTitleIgnorePrefix(title: string): string;
+    static getTitlePrefixAtEnd(title: string): string;
+    get authorName(): string;
+    get authorNameLF(): string;
+    get seriesName(): string;
+    get includedAudioFiles(): AudioFileObject[];
+    get hasMediaFiles(): boolean;
+    get hasAudioTracks(): boolean;
+    get ebookFormat(): string;
+    get size(): number;
+    checkCanDirectPlay(supportedMimeTypes: string[]): boolean;
+    getTracklist(libraryItemId: string): AudioTrack[];
+    getChapters(): ChapterObject[];
+    getPlaybackTitle(): string;
+    getPlaybackAuthor(): string;
+    getPlaybackDuration(): number;
+    toOldJSON(libraryItemId: string): any;
+    toOldJSONMinified(): any;
+    toOldJSONExpanded(libraryItemId: string): any;
+}

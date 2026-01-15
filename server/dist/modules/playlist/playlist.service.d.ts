@@ -1,0 +1,30 @@
+import { Playlist } from '../../core/database/models/playlist.model';
+import { PlaylistMediaItem } from '../../core/database/models/playlist-media-item.model';
+import { LibraryItem } from '../../core/database/models/library-item.model';
+import { PodcastEpisode } from '../../core/database/models/podcast-episode.model';
+import { Collection } from '../../core/database/models/collection.model';
+import { User } from '../../core/database/models/user.model';
+import { LoggerService } from '../../core/logger/logger.service';
+import { SocketGateway } from '../../core/socket/socket.gateway';
+import { Sequelize } from 'sequelize-typescript';
+export declare class PlaylistService {
+    private readonly playlistModel;
+    private readonly playlistMediaItemModel;
+    private readonly libraryItemModel;
+    private readonly podcastEpisodeModel;
+    private readonly collectionModel;
+    private readonly sequelize;
+    private readonly logger;
+    private readonly socketGateway;
+    constructor(playlistModel: typeof Playlist, playlistMediaItemModel: typeof PlaylistMediaItem, libraryItemModel: typeof LibraryItem, podcastEpisodeModel: typeof PodcastEpisode, collectionModel: typeof Collection, sequelize: Sequelize, logger: LoggerService, socketGateway: SocketGateway);
+    create(createDto: any, user: User): Promise<any>;
+    findAllForUser(userId: string): Promise<any>;
+    findOne(playlistId: string, userId: string): Promise<any>;
+    update(playlistId: string, updateDto: any, userId: string): Promise<any>;
+    delete(playlistId: string, userId: string): Promise<void>;
+    addItem(playlistId: string, itemToAdd: any, userId: string): Promise<any>;
+    removeItem(playlistId: string, libraryItemId: string, episodeId: string | null, userId: string): Promise<any>;
+    addBatch(playlistId: string, items: any[], userId: string): Promise<any>;
+    removeBatch(playlistId: string, items: any[], userId: string): Promise<any>;
+    createFromCollection(collectionId: string, user: User): Promise<any>;
+}

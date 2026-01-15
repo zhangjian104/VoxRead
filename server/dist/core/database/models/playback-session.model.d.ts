@@ -1,0 +1,32 @@
+import { Model } from 'sequelize-typescript';
+import { User } from './user.model';
+import { Device } from './device.model';
+import { Library } from './library.model';
+export declare class PlaybackSession extends Model<PlaybackSession> {
+    id: string;
+    mediaItemId: string;
+    mediaItemType: 'book' | 'podcastEpisode';
+    displayTitle: string;
+    displayAuthor: string;
+    duration: number;
+    playMethod: number;
+    mediaPlayer: string;
+    startTime: number;
+    currentTime: number;
+    serverVersion: string;
+    coverPath: string;
+    timeListening: number;
+    mediaMetadata: Record<string, any>;
+    date: string;
+    dayOfWeek: string;
+    extraData: Record<string, any>;
+    userId: string;
+    deviceId: string;
+    libraryId: string;
+    user: User;
+    device: Device;
+    library: Library;
+    static removeById(sessionId: string): Promise<number>;
+    static getById(sessionId: string): Promise<PlaybackSession>;
+    toOldJSON(): any;
+}

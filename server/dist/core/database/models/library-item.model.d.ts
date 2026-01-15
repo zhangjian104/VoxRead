@@ -1,0 +1,62 @@
+import { Model } from 'sequelize-typescript';
+import { Library } from './library.model';
+import { LibraryFolder } from './library-folder.model';
+import { Book } from './book.model';
+import { Podcast } from './podcast.model';
+export interface LibraryFileObject {
+    ino: string;
+    isSupplementary: boolean;
+    addedAt: number;
+    updatedAt: number;
+    metadata: {
+        filename: string;
+        ext: string;
+        path: string;
+        relPath: string;
+        size: number;
+        mtimeMs: number;
+        ctimeMs: number;
+        birthtimeMs: number;
+    };
+}
+export declare class LibraryItem extends Model<LibraryItem> {
+    id: string;
+    ino: string;
+    path: string;
+    relPath: string;
+    mediaId: string;
+    mediaType: 'book' | 'podcast';
+    isFile: boolean;
+    isMissing: boolean;
+    isInvalid: boolean;
+    mtime: Date;
+    ctime: Date;
+    birthtime: Date;
+    size: string;
+    lastScan: Date;
+    lastScanVersion: string;
+    libraryFiles: LibraryFileObject[];
+    extraData: Record<string, any>;
+    title: string;
+    titleIgnorePrefix: string;
+    authorNamesFirstLast: string;
+    authorNamesLastFirst: string;
+    libraryId: string;
+    libraryFolderId: string;
+    library: Library;
+    libraryFolder: LibraryFolder;
+    media: Book | Podcast;
+    static removeById(libraryItemId: string): Promise<number>;
+    static getExpandedById(libraryItemId: string): Promise<LibraryItem>;
+    static checkExistsById(libraryItemId: string): Promise<boolean>;
+    get isBook(): boolean;
+    get isPodcast(): boolean;
+    get hasAudioTracks(): boolean;
+    getMedia(): Promise<Book | Podcast>;
+    getTrackList(episodeId?: string): any[];
+    getAudioFileWithIno(ino: string): any;
+    getLibraryFileWithIno(ino: string): LibraryFileObject;
+    toOldJSON(): any;
+    toOldJSONMinified(): any;
+    toOldJSONExpanded(): any;
+}

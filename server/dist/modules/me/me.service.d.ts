@@ -1,0 +1,33 @@
+import { User } from '../../core/database/models/user.model';
+import { MediaProgress } from '../../core/database/models/media-progress.model';
+import { LibraryItem } from '../../core/database/models/library-item.model';
+import { Series } from '../../core/database/models/series.model';
+import { LoggerService } from '../../core/logger/logger.service';
+import { SocketGateway } from '../../core/socket/socket.gateway';
+export declare class MeService {
+    private readonly userModel;
+    private readonly mediaProgressModel;
+    private readonly libraryItemModel;
+    private readonly seriesModel;
+    private readonly logger;
+    private readonly socketGateway;
+    constructor(userModel: typeof User, mediaProgressModel: typeof MediaProgress, libraryItemModel: typeof LibraryItem, seriesModel: typeof Series, logger: LoggerService, socketGateway: SocketGateway);
+    getCurrentUser(user: User): any;
+    getListeningSessions(userId: string, page: number, itemsPerPage: number): Promise<any>;
+    getItemListeningSessions(userId: string, libraryItemId: string, episodeId: string | null, page: number, itemsPerPage: number): Promise<any>;
+    getListeningStats(userId: string): Promise<any>;
+    getMediaProgress(user: User, libraryItemId: string, episodeId: string | null): Promise<any>;
+    removeMediaProgress(user: User, progressId: string): Promise<void>;
+    createUpdateMediaProgress(user: User, libraryItemId: string, episodeId: string | null, progressData: any): Promise<void>;
+    batchUpdateMediaProgress(user: User, itemProgressPayloads: any[]): Promise<void>;
+    createBookmark(user: User, libraryItemId: string, time: number, title: string): Promise<any>;
+    updateBookmark(user: User, libraryItemId: string, time: number, title: string): Promise<any>;
+    removeBookmark(user: User, libraryItemId: string, time: number): Promise<void>;
+    updatePassword(user: User, currentPassword: string, newPassword: string, changePassword: (user: User, old: string, : any, string: any) => Promise<any>): Promise<void>;
+    getAllLibraryItemsInProgress(user: User, limit: number): Promise<any>;
+    removeSeriesFromContinueListening(user: User, seriesId: string): Promise<any>;
+    readdSeriesFromContinueListening(user: User, seriesId: string): Promise<any>;
+    removeItemFromContinueListening(user: User, progressId: string): Promise<any>;
+    updateUserEReaderDevices(user: User, ereaderDevices: any[]): Promise<any>;
+    getStatsForYear(userId: string, year: number): Promise<any>;
+}
