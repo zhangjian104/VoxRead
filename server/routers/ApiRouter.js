@@ -63,9 +63,11 @@ class ApiRouter {
 
   init() {
     //
-    // Library Routes
+    // 资源库路由（Library）
+    // 说明：用于创建/查询/更新/删除资源库，以及获取资源库的条目、系列、
+    //      收藏、播放列表、个性化书架、筛选数据、统计、作者/播音等信息。
     //
-    this.router.get(/^\/libraries/, this.apiCacheManager.middleware)
+    this.router.get(/^\/libraries/, this.apiCacheManager.middleware) // 对所有 /libraries* 请求启用 API 缓存
     this.router.post('/libraries', LibraryController.create.bind(this))
     this.router.get('/libraries', LibraryController.findAll.bind(this))
     this.router.get('/libraries/:id', LibraryController.middleware.bind(this), LibraryController.findOne.bind(this))
@@ -97,7 +99,8 @@ class ApiRouter {
     this.router.get('/libraries/:id/download', LibraryController.middleware.bind(this), LibraryController.downloadMultiple.bind(this))
 
     //
-    // Item Routes
+    // 资源条目路由（Library Item）
+    // 说明：条目批量操作、详情/删除、封面、播放、媒体元数据、文件与章节管理。
     //
     this.router.post('/items/batch/delete', LibraryItemController.batchDelete.bind(this))
     this.router.post('/items/batch/update', LibraryItemController.batchUpdate.bind(this))
@@ -128,7 +131,8 @@ class ApiRouter {
     this.router.patch('/items/:id/ebook/:fileid/status', LibraryItemController.middleware.bind(this), LibraryItemController.updateEbookFileStatus.bind(this))
 
     //
-    // User Routes
+    // 用户路由（User）
+    // 说明：用户 CRUD、在线用户、OpenID 解绑、听书会话与统计。
     //
     this.router.post('/users', UserController.middleware.bind(this), UserController.create.bind(this))
     this.router.get('/users', UserController.middleware.bind(this), UserController.findAll.bind(this))
@@ -141,7 +145,8 @@ class ApiRouter {
     this.router.get('/users/:id/listening-stats', UserController.middleware.bind(this), UserController.getListeningStats.bind(this))
 
     //
-    // Collection Routes
+    // 收藏集路由（Collection）
+    // 说明：收藏集 CRUD、批量增删条目。
     //
     this.router.post('/collections', CollectionController.middleware.bind(this), CollectionController.create.bind(this))
     this.router.get('/collections', CollectionController.findAll.bind(this))
@@ -154,7 +159,8 @@ class ApiRouter {
     this.router.post('/collections/:id/batch/remove', CollectionController.middleware.bind(this), CollectionController.removeBatch.bind(this))
 
     //
-    // Playlist Routes
+    // 播放列表路由（Playlist）
+    // 说明：播放列表 CRUD、增删条目、批量操作、从收藏集生成。
     //
     this.router.post('/playlists', PlaylistController.create.bind(this))
     this.router.get('/playlists', PlaylistController.findAllForUser.bind(this))
@@ -168,7 +174,8 @@ class ApiRouter {
     this.router.post('/playlists/collection/:collectionId', PlaylistController.createFromCollection.bind(this))
 
     //
-    // Current User Routes (Me)
+    // 当前用户路由（Me）
+    // 说明：获取当前用户信息、进度、书签、密码、统计与阅读器设备。
     //
     this.router.get('/me', MeController.getCurrentUser.bind(this))
     this.router.get('/me/listening-sessions', MeController.getListeningSessions.bind(this))
@@ -190,7 +197,8 @@ class ApiRouter {
     this.router.post('/me/ereader-devices', MeController.updateUserEReaderDevices.bind(this))
 
     //
-    // Backup Routes
+    // 备份路由（Backup）
+    // 说明：备份列表、创建/删除、下载/应用、上传与路径设置。
     //
     this.router.get('/backups', BackupController.middleware.bind(this), BackupController.getAll.bind(this))
     this.router.post('/backups', BackupController.middleware.bind(this), BackupController.create.bind(this))
@@ -201,13 +209,15 @@ class ApiRouter {
     this.router.patch('/backups/path', BackupController.middleware.bind(this), BackupController.updatePath.bind(this))
 
     //
-    // File System Routes
+    // 文件系统路由（File System）
+    // 说明：列出路径、检查路径是否存在。
     //
     this.router.get('/filesystem', FileSystemController.getPaths.bind(this))
     this.router.post('/filesystem/pathexists', FileSystemController.checkPathExists.bind(this))
 
     //
-    // Author Routes
+    // 作者路由（Author）
+    // 说明：作者详情/更新/删除、匹配与头像管理。
     //
     this.router.get('/authors/:id', AuthorController.middleware.bind(this), AuthorController.findOne.bind(this))
     this.router.patch('/authors/:id', AuthorController.middleware.bind(this), AuthorController.update.bind(this))
@@ -218,13 +228,15 @@ class ApiRouter {
     this.router.delete('/authors/:id/image', AuthorController.middleware.bind(this), AuthorController.deleteImage.bind(this))
 
     //
-    // Series Routes
+    // 系列路由（Series）
+    // 说明：系列详情与更新。
     //
     this.router.get('/series/:id', SeriesController.middleware.bind(this), SeriesController.findOne.bind(this))
     this.router.patch('/series/:id', SeriesController.middleware.bind(this), SeriesController.update.bind(this))
 
     //
-    // Playback Session Routes
+    // 播放会话路由（Playback Session）
+    // 说明：查询会话、关闭会话、同步会话进度。
     //
     this.router.get('/sessions', SessionController.getAllWithUserData.bind(this))
     this.router.delete('/sessions/:id', SessionController.middleware.bind(this), SessionController.delete.bind(this))
@@ -238,7 +250,8 @@ class ApiRouter {
     this.router.post('/session/:id/close', SessionController.openSessionMiddleware.bind(this), SessionController.close.bind(this))
 
     //
-    // Podcast Routes
+    // 播客路由（Podcast）
+    // 说明：创建/导入播客、检测/下载剧集、匹配剧集与剧集详情管理。
     //
     this.router.post('/podcasts', PodcastController.create.bind(this))
     this.router.post('/podcasts/feed', PodcastController.getPodcastFeed.bind(this))
@@ -255,7 +268,8 @@ class ApiRouter {
     this.router.delete('/podcasts/:id/episode/:episodeId', PodcastController.middleware.bind(this), PodcastController.removeEpisode.bind(this))
 
     //
-    // Notification Routes (Admin and up)
+    // 通知路由（Notification，Admin 及以上）
+    // 说明：通知配置、测试发送、创建与删除通知规则。
     //
     this.router.get('/notifications', NotificationController.middleware.bind(this), NotificationController.get.bind(this))
     this.router.patch('/notifications', NotificationController.middleware.bind(this), NotificationController.update.bind(this))
@@ -267,7 +281,8 @@ class ApiRouter {
     this.router.get('/notifications/:id/test', NotificationController.middleware.bind(this), NotificationController.sendNotificationTest.bind(this))
 
     //
-    // Email Routes (Admin and up)
+    // 邮件路由（Email，Admin 及以上）
+    // 说明：邮件服务设置、测试发送、电子书设备管理与发送。
     //
     this.router.get('/emails/settings', EmailController.adminMiddleware.bind(this), EmailController.getSettings.bind(this))
     this.router.patch('/emails/settings', EmailController.adminMiddleware.bind(this), EmailController.updateSettings.bind(this))
@@ -276,7 +291,8 @@ class ApiRouter {
     this.router.post('/emails/send-ebook-to-device', EmailController.sendEBookToDevice.bind(this))
 
     //
-    // Search Routes
+    // 搜索路由（Search）
+    // 说明：封面、书籍、播客、作者、章节与元数据提供方搜索。
     //
     this.router.get('/search/covers', SearchController.findCovers.bind(this))
     this.router.get('/search/books', SearchController.findBooks.bind(this))
@@ -286,13 +302,15 @@ class ApiRouter {
     this.router.get('/search/providers', SearchController.getAllProviders.bind(this))
 
     //
-    // Cache Routes (Admin and up)
+    // 缓存路由（Cache，Admin 及以上）
+    // 说明：清理全局缓存或条目缓存。
     //
     this.router.post('/cache/purge', CacheController.purgeCache.bind(this))
     this.router.post('/cache/items/purge', CacheController.purgeItemsCache.bind(this))
 
     //
-    // Tools Routes (Admin and up)
+    // 工具路由（Tools，Admin 及以上）
+    // 说明：m4b 编码、嵌入元数据（含批量）。
     //
     this.router.post('/tools/item/:id/encode-m4b', ToolsController.middleware.bind(this), ToolsController.encodeM4b.bind(this))
     this.router.delete('/tools/item/:id/encode-m4b', ToolsController.middleware.bind(this), ToolsController.cancelM4bEncode.bind(this))
@@ -300,7 +318,8 @@ class ApiRouter {
     this.router.post('/tools/batch/embed-metadata', ToolsController.middleware.bind(this), ToolsController.batchEmbedMetadata.bind(this))
 
     //
-    // RSS Feed Routes (Admin and up)
+    // RSS Feed 路由（Admin 及以上）
+    // 说明：开启/关闭条目、集合或系列的 RSS 订阅。
     //
     this.router.get('/feeds', RSSFeedController.middleware.bind(this), RSSFeedController.getAll.bind(this))
     this.router.post('/feeds/item/:itemId/open', RSSFeedController.middleware.bind(this), RSSFeedController.openRSSFeedForItem.bind(this))
@@ -309,26 +328,30 @@ class ApiRouter {
     this.router.post('/feeds/:id/close', RSSFeedController.middleware.bind(this), RSSFeedController.closeRSSFeed.bind(this))
 
     //
-    // Custom Metadata Provider routes
+    // 自定义元数据提供方路由
+    // 说明：自定义元数据提供方的列表、创建与删除。
     //
     this.router.get('/custom-metadata-providers', CustomMetadataProviderController.middleware.bind(this), CustomMetadataProviderController.getAll.bind(this))
     this.router.post('/custom-metadata-providers', CustomMetadataProviderController.middleware.bind(this), CustomMetadataProviderController.create.bind(this))
     this.router.delete('/custom-metadata-providers/:id', CustomMetadataProviderController.middleware.bind(this), CustomMetadataProviderController.delete.bind(this))
 
     //
-    // Share routes
+    // 分享路由（Share）
+    // 说明：创建/删除可对外分享的媒体条目。
     //
     this.router.post('/share/mediaitem', ShareController.createMediaItemShare.bind(this))
     this.router.delete('/share/mediaitem/:id', ShareController.deleteMediaItemShare.bind(this))
 
     //
-    // Stats Routes
+    // 统计路由（Stats）
+    // 说明：年度统计与服务器统计。
     //
     this.router.get('/stats/year/:year', StatsController.middleware.bind(this), StatsController.getAdminStatsForYear.bind(this))
     this.router.get('/stats/server', StatsController.middleware.bind(this), StatsController.getServerStats.bind(this))
 
     //
-    // API Key Routes
+    // API Key 路由
+    // 说明：API Key 列表、创建、更新、删除。
     //
     this.router.get('/api-keys', ApiKeyController.middleware.bind(this), ApiKeyController.getAll.bind(this))
     this.router.post('/api-keys', ApiKeyController.middleware.bind(this), ApiKeyController.create.bind(this))
@@ -336,7 +359,8 @@ class ApiRouter {
     this.router.delete('/api-keys/:id', ApiKeyController.middleware.bind(this), ApiKeyController.delete.bind(this))
 
     //
-    // Misc Routes
+    // 杂项路由（Misc）
+    // 说明：上传、任务、服务端设置、标签/分类维护、鉴权与监控相关接口。
     //
     this.router.post('/upload', MiscController.handleUpload.bind(this))
     this.router.get('/tasks', MiscController.getTasks.bind(this))

@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch server index.js -- --dev",
+    "dev:all": "node scripts/dev-all.js",
     "start": "node index.js",
     "start-dev": "node index.js --prod-with-dev-env",
     "client": "cd client && npm ci && npm run generate",
